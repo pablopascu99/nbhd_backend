@@ -19,4 +19,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hola', [noticiaController::class,'hola']);
+Route::get('/hola/', [noticiaController::class,'hola']);
+Route::get('/localidad/{localidad}', [noticiaController::class,'localidad']);

@@ -3,6 +3,9 @@ import requests
 from bs4 import BeautifulSoup
 from deep_translator import GoogleTranslator
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import sys
+
+php_param = sys.argv[1]
 
 # direccion base del scraper
 # a esta dirección se le aplicaran diferentes filtros y formatos segun las opciones del usuario
@@ -14,7 +17,7 @@ headers = {
 }
 # funcion aux 2: esta funcion filtra la página 20minutos.com por localidad para obtener la url
 def filtrar_localidad(base_url):
-    localidad = "alcobendas"
+    localidad = php_param
     localidad_adaptada = localidad.replace(" ", "+")
     if localidad_adaptada: 
         url_filtrada = base_url + "busqueda/?q=" + localidad_adaptada + "&sort_field=&category=&publishedAt%5Bfrom%5D=&publishedAt%5Buntil%5D="

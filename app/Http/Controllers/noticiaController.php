@@ -15,4 +15,15 @@ class noticiaController extends Controller
         // echo ($result);
         return $json_clean;
     }
+
+    public function localidad($localidad)
+    {   
+        $c = '"C:\Users\pablo 2\nbhd\script.py" '.$localidad;
+        $result = exec('python '.$c);
+        $json_clean = str_replace("'","\"",$result);
+        $json = var_dump(json_decode($json_clean));
+        // echo ($result);
+        return $json_clean;
+        return $localidad;
+    }
 }
