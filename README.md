@@ -1,4 +1,10 @@
+# Backend NBHD
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+
+## Diseño E-R
+
+![NBHD_PC3_updated](https://user-images.githubusercontent.com/71699683/165815191-b9c42e75-93c1-40c8-adaf-3426b3694c89.jpg)
 
 <p align="center">
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
