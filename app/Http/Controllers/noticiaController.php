@@ -8,12 +8,11 @@ class noticiaController extends Controller
 {
     public function localidad($localidad)
     {   
-        $c = '"C:\Users\pablo 2\nbhd\script.py" '.$localidad;
+        $c = '"..\script.py" '.$localidad;
         $result = exec('python '.$c);
+        $result1 = exec('ls');
         $json_clean = str_replace("'","\"",$result);
-        $json = var_dump(json_decode($json_clean));
-        // echo ($result);
+        $json = json_decode($json_clean);
         return $json_clean;
-        return $localidad;
     }
 }
