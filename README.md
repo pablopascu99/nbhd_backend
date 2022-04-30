@@ -2,6 +2,12 @@
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
+## Clonación
+
+A la hora de clonar el proyecto adecuadamente (con todos los archivos y dependencias) se tendrá que seguir el siguiente modus operandi: (Fuente: StackOverflow)
+
+![clone_correctly](https://user-images.githubusercontent.com/71699683/166115980-834e9569-7179-40a5-9c3d-2ccd311861de.png)
+
 ## Diseño E-R
 
 ![NBHD_PC3_updated](https://user-images.githubusercontent.com/71699683/165815191-b9c42e75-93c1-40c8-adaf-3426b3694c89.jpg)
