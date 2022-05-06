@@ -14,9 +14,10 @@ class CreateUsuariosTable extends Migration
     public function up()
     {
         Schema::create('usuarios', function (Blueprint $table) {
-            $table->primary('id');
+            $table->increments('id');
             $table->timestamps();
-            $table->foreignId('id_historico')->constrained('historico__usuarios');
+            $table->unsignedInteger('historico_usuario_id');
+            $table->foreign('historico_usuario_id')->references('id')->on('historico_usuarios')->onDelete('cascade')->onUpdate('cascade');
             $table->string('nombre');
             $table->string('apellidos');
             $table->string('email');

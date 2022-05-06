@@ -1,11 +1,58 @@
 import re
 import requests
 from bs4 import BeautifulSoup
-from deep_translator import GoogleTranslator
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import sys
+import string
+from nltk.tokenize import word_tokenize
+from nltk.stem.snowball import SpanishStemmer
+import joblib
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pandas as pd
 
 php_param = sys.argv[1]
+
+def tokenizar_texto(texto: str):
+    lista_tokens = word_tokenize(texto.lower(), language="spanish")
+    return lista_tokens
+
+
+def limpiar_texto(lista_tokens: list):
+    palabras = []
+    fichero_parada = open("../resources/py/Lista_Stop_Words.txt", "r", encoding="utf8")
+    lista_parada = fichero_parada.read().split("\n")
+    puntuacion = list(string.punctuation)
+    lista_parada += puntuacion
+    for palabra in lista_tokens:
+        if palabra not in lista_parada:
+            palabras.append(palabra)
+    return palabras
+
+def stemming(lista_palabras: list):
+    texto = ""
+    stemmer = SpanishStemmer()
+    for palabra in lista_palabras:
+        s = stemmer.stem(palabra)
+        texto = texto + " " + s
+    return texto
+
+def predecir_clases(modelo, coleccion_noticias: list):
+    tf = TfidfVectorizer(vocabulary=joblib.load('../resources/py/vocabulario.bin'))
+    vectores_noticias = tf.fit_transform(coleccion_noticias).toarray()
+    matriz_idf = pd.DataFrame(vectores_noticias, columns=tf.get_feature_names_out())
+    predicciones = modelo.predict(matriz_idf)
+    return predicciones
+
+def resultados(predicciones: list):
+    odio = 0
+    no_odio = 0
+    for pred in predicciones:
+        if pred == 'Odio':
+            odio += 1
+        else:
+            no_odio += 1
+    return {"Odio": odio/len(predicciones) * 100, "No Odio": no_odio/len(predicciones) * 100}
+
+# php_param = sys.argv[1]
 
 # direccion base del scraper
 # a esta dirección se le aplicaran diferentes filtros y formatos segun las opciones del usuario
@@ -43,7 +90,6 @@ def obtener_url_privadas(url):
             puntero = False
     return hrefs
 
-
 # funcion 2: esta funcion obtiene los datos de cada item de la página 20minutos.com
 def scrapear_noticia(url_privada):
     soupNoticia = BeautifulSoup(requests.get(url_privada, headers=headers).text, 'html.parser')
@@ -55,6 +101,7 @@ def scrapear_noticia(url_privada):
 
 # esta funcion obtiene una lista con los datos de todas las noticias de la página 20minutos.com
 def scraper_20minutos(url):
+    modelo = joblib.load('../resources/py/modelo.bin')
     url_filtrada = filtrar_localidad(url)
     response = requests.get(url_filtrada)
     if response.status_code != 200:
@@ -62,21 +109,18 @@ def scraper_20minutos(url):
         exit()
     else:
         lista_urls = obtener_url_privadas(url_filtrada)
-        lista_datos = []
+        collecion = []
         for href in lista_urls:
             texto = scrapear_noticia(href)
-            traductor = GoogleTranslator(target='en')
-            if len(texto)>=5000:
-                  texto = texto[0:4999]
-            texto_traducido = traductor.translate(texto)
-            vs = SentimentIntensityAnalyzer()
-            vs_result = vs.polarity_scores(texto_traducido)
-            lista_datos.append(vs_result)
-        datos_noticia = {
-              '20min': lista_datos,
-        }
+            tokens = tokenizar_texto(texto)
+            palabras = limpiar_texto(tokens)
+            texto_limpio = stemming(palabras)
+            collecion.append(texto_limpio)
+        pred = predecir_clases(modelo, collecion)
+        res = resultados(pred)
+        return res
+
     # output: lista de diccionarios por cada noticia: [{datos noticia 1},{datos noticia 2}]
-    return datos_noticia
 
 #print(filtrar_localidad(baseurl))
 #obtener_url_privadas(baseurl)

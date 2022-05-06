@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLugarConsultadosTable extends Migration
+class CreateCachesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateLugarConsultadosTable extends Migration
      */
     public function up()
     {
-        Schema::create('lugar__consultados', function (Blueprint $table) {
-            $table->primary('id');
+        Schema::create('caches', function (Blueprint $table) {
+            $table->increments('id');
             $table->timestamps();
-            $table->foreignId('id_historico')->constrained('historico__usuarios');
-            $table->foreignId('id_interes')->constrained('lugares__interes');
+            $table->unsignedInteger('localizaciones_id');
+            $table->foreign('localizaciones_id')->references('id')->on('localizaciones')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('num_consultas');
         });
     }
@@ -29,6 +29,6 @@ class CreateLugarConsultadosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lugar__consultados');
+        Schema::dropIfExists('caches');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCachesTable extends Migration
+class CreateLocalizacionesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateCachesTable extends Migration
      */
     public function up()
     {
-        Schema::create('caches', function (Blueprint $table) {
-            $table->primary('id');
+        Schema::create('localizaciones', function (Blueprint $table) {
+            $table->increments('id');
             $table->timestamps();
-            $table->foreignId('id_localizacion')->constrained('localizaciones');
-            $table->integer('num_consultas');
+            $table->float('odio');
+            $table->string('municipio');
+            $table->integer('vecesConsultado');
         });
     }
 
@@ -28,6 +29,6 @@ class CreateCachesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('caches');
+        Schema::dropIfExists('localizaciones');
     }
 }

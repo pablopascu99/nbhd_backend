@@ -13,9 +13,11 @@ class CreateLugaresInteresTable extends Migration
      */
     public function up()
     {
-        Schema::create('lugares__interes', function (Blueprint $table) {
-            $table->primary('id'); 
-            $table->foreignId('id_localizacion')->constrained('localizaciones');
+        Schema::create('lugares_interes', function (Blueprint $table) {
+            $table->increments('id'); 
+            $table->timestamps();
+            $table->unsignedInteger('localizaciones_id');
+            $table->foreign('localizaciones_id')->references('id')->on('localizaciones')->onDelete('cascade')->onUpdate('cascade');
             $table->string('tipo_establecimiento'); 
             $table->float('puntuacion_media'); 
             $table->string('telefono'); 
@@ -33,6 +35,6 @@ class CreateLugaresInteresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lugares__interes');
+        Schema::dropIfExists('lugares_interes');
     }
 }

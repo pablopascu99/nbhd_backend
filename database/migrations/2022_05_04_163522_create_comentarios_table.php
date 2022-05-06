@@ -14,9 +14,10 @@ class CreateComentariosTable extends Migration
     public function up()
     {
         Schema::create('comentarios', function (Blueprint $table) {
-            $table->primary('id');
+            $table->increments('id');
             $table->timestamps();
-            $table->foreignId('id_interes')->constrained('lugares__interes');
+            $table->unsignedInteger('interes_id');
+            $table->foreign('interes_id')->references('id')->on('lugares_interes')->onDelete('cascade')->onUpdate('cascade');
             $table->string('autor'); 
             $table->string('texto'); 
             $table->date('fecha'); 

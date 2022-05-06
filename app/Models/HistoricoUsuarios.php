@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Historico_Usuarios extends Model
+class HistoricoUsuarios extends Model
 {
     use HasFactory;
 }

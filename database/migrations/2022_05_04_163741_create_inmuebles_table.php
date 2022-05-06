@@ -14,9 +14,10 @@ class CreateInmueblesTable extends Migration
     public function up()
     {
         Schema::create('inmuebles', function (Blueprint $table) {
-            $table->primary('id');
+            $table->increments('id');
             $table->timestamps();
-            $table->foreignId('id_localizacion')->constrained('localizaciones');
+            $table->unsignedInteger('localizaciones_id');
+            $table->foreign('localizaciones_id')->references('id')->on('localizaciones')->onDelete('cascade')->onUpdate('cascade');
             $table->string('nombre');
             $table->string('categoria');
             $table->string('descripcion');
