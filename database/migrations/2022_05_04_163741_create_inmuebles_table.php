@@ -19,7 +19,8 @@ class CreateInmueblesTable extends Migration
             $table->unsignedInteger('localizaciones_id');
             $table->foreign('localizaciones_id')->references('id')->on('localizaciones')->onDelete('cascade')->onUpdate('cascade');
             $table->string('nombre');
-            $table->string('categoria');
+            $table->string('m2');
+            $table->string('banos');
             $table->string('descripcion');
             $table->float('precio');
             $table->float('longitud');

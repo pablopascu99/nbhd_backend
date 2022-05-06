@@ -20,9 +20,6 @@ class noticiaController extends Controller
         $c = '"..\resources\py\scraper_yaencontre.py" '.$localidad." ".$tipo;
         $result = exec('python '.$c);
         $json_clean = str_replace("'","\"",$result);
-        $json_clean = str_replace("[{","{",$json_clean);
-        $json_clean = str_replace("}]","}",$json_clean);
-        echo $json_clean;
         $json = json_decode($json_clean);
         return $json;
     }

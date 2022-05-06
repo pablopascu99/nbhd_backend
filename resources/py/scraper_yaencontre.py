@@ -2,6 +2,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 import sys
+import unicodedata
 
 php_param = sys.argv[1]
 php_param_2 = sys.argv[2]
@@ -91,10 +92,12 @@ def scrapear_inmueble(url_privada):
     soup = BeautifulSoup(requests.get(url_privada, headers=headers).text, 'html.parser')
     try:
         precio = soup.find('span', class_='d-block price').text.strip()
+        precio = unicodedata.encode('ascii','ignore')
     except:
         precio = "No precio"   
     try: 
         nombre = soup.find('h1', id='title-realestate').text
+        nombre = unicodedata.encode('ascii','ignore')
     except:
         nombre = "No nombre"
     imagenes = []
@@ -104,18 +107,23 @@ def scrapear_inmueble(url_privada):
         descripcion = soup.find('div', class_='raw-format l-height-lg').text
         descripcion = re.sub(r'\"','', descripcion)
         descripcion = re.sub(r'\'','', descripcion)
+        descripcion = re.sub(r'\\','', descripcion)
+        descripcion = unicodedata.encode('ascii','ignore')
     except:
         descripcion = "No descripcion"
     try:
         habitaciones = soup.find('div', class_='icon-room').next_element.text
+        habitaciones = unicodedata.encode('ascii','ignore')
     except:
         habitaciones = "No habitaciones"
     try:
         banos = soup.find('div', class_='icon-bath').next_element.text
+        banos = unicodedata.encode('ascii','ignore')
     except:
         banos = "No banos"
     try:
         metros2 = soup.find('div', class_='icon-meter').next_element.text
+        metros2 = unicodedata.encode('ascii','ignore')
     except:
         metros2 = "No metros2"
     try:
@@ -133,6 +141,7 @@ def scrapear_inmueble(url_privada):
     try:
         caracteristicas = []
         for caracteristica in soup.find_all('div', class_='extrasItem'):
+            caracteristica = unicodedata.encode('ascii','ignore')
             caracteristicas.append(caracteristica.text)
     except:
         caracteristicas = "No caracteristicas"
