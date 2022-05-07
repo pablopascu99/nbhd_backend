@@ -173,9 +173,13 @@ def scraper_yaencontre(url):
         #print("Pagina encontrada")
         lista_urls = obtener_url_privadas(url_filtrada)
         lista_datos = []
+        cont=0
         for href in lista_urls:
             datos = scrapear_inmueble(href)
             lista_datos.append(datos)
+            if cont==3:
+                break
+            cont = cont +1
             #print(datos)
         #print(lista_datos)
         #print("Inmuebles obtenidos")

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Localizaciones;
 
 class noticiaController extends Controller
 {
@@ -12,6 +13,10 @@ class noticiaController extends Controller
         $result = exec('python '.$c);
         $json_clean = str_replace("'","\"",$result);
         $json = json_decode($json_clean);
+        $local = new Localizaciones;
+        $local->odio = $json->Odio;
+        $local->municipio = $localidad;
+        $local->save();
         return $json;
     }
 
@@ -21,7 +26,13 @@ class noticiaController extends Controller
         $result = exec('python '.$c);
         $json_clean = str_replace("'","\"",$result);
         $json = json_decode($json_clean);
-        return $json;
+        $lista_nombres = array();
+    
+        for ($i = 0; $i <= (count($json)-1); $i++) {
+            // $data=array('nombre'=>$json[$i]->nombre,"m2"=>$json[$i]->metros2,"precio"=>$json[$i]->precio,"banos"=>$json[$i]->banos,"descripcion"=>$json[$i]->descripcion);
+            // Inmuebles::table('student_details')->insert($data);
+        }
+        return $lista_nombres;
     }
 
 }
