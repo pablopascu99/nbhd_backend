@@ -18,7 +18,7 @@ def tokenizar_texto(texto: str):
 
 def limpiar_texto(lista_tokens: list):
     palabras = []
-    fichero_parada = open("../resources/py/Lista_Stop_Words.txt", "r", encoding="utf8")
+    fichero_parada = open("Lista_Stop_Words.txt", "r", encoding="utf8")
     lista_parada = fichero_parada.read().split("\n")
     puntuacion = list(string.punctuation)
     lista_parada += puntuacion
@@ -36,7 +36,7 @@ def stemming(lista_palabras: list):
     return texto
 
 def predecir_clases(modelo, coleccion_noticias: list):
-    tf = TfidfVectorizer(vocabulary=joblib.load('../resources/py/vocabulario.bin'))
+    tf = TfidfVectorizer(vocabulary=joblib.load('vocabulario.bin'))
     vectores_noticias = tf.fit_transform(coleccion_noticias).toarray()
     matriz_idf = pd.DataFrame(vectores_noticias, columns=tf.get_feature_names_out())
     predicciones = modelo.predict(matriz_idf)
@@ -59,6 +59,10 @@ baseurl = "https://www.20minutos.es/"
 # direccion base del scraper
 # a esta dirección se le aplicaran diferentes filtros y formatos segun las opciones del usuario
 baseurl_mundo = "https://ariadna.elmundo.es/"
+
+# direccion base del scraper
+# a esta dirección se le aplicaran diferentes filtros y formatos segun las opciones del usuario
+baseurlmunicipios = "https://noticiasparamunicipios.com/"
 
 # declaramos los headers para la petición
 headers = {
@@ -103,7 +107,7 @@ def scrapear_noticia(url_privada):
 
 # esta funcion obtiene una lista con los datos de todas las noticias de la página 20minutos.com
 def scraper_20minutos(url):
-    modelo = joblib.load('../resources/py/modelo.bin')
+    modelo = joblib.load('modelo.bin')
     url_filtrada = filtrar_localidad(url)
     response = requests.get(url_filtrada)
     if response.status_code != 200:
@@ -180,7 +184,7 @@ def scrapear_noticia_mundo(url_privada):
 
 # esta funcion obtiene una lista con los datos de todas las noticias de la página elmundo.com
 def scraper_elmundo(url):
-    modelo = joblib.load('../resources/py/modelo.bin')
+    modelo = joblib.load('modelo.bin') #../resources/py/
     url_filtrada = filtrar_localidad_mundo(url)
     response = requests.get(url_filtrada)
     if response.status_code != 200:
@@ -199,6 +203,85 @@ def scraper_elmundo(url):
         res_mundo = resultados(pred)
         return res_mundo
 
-print(scraper_elmundo(baseurl_mundo)) 
-print(scraper_20minutos(baseurl))
+# funcion aux 1: esta funcion filtra la página noticiasparamunicipios.com por localidad para obtener la url
+def filtrar_localidad_municipios(base_url):
+    localidad = php_param
+    localidad_adaptada = localidad.replace(" ", "+")
+    if localidad_adaptada: 
+        url_filtrada = base_url + "?s=" + localidad_adaptada
+    return url_filtrada
+
+# funcion 1: esta funcion obtiene las urls privadas de cada item, además se realiza la paginacion
+def obtener_url_privadas_municipios(url):
+    #print(url)
+    hrefs = []
+    puntero = True
+    actual = url
+    i = 2
+    while(puntero):
+        soup = BeautifulSoup(requests.get(actual, headers=headers).text, 'html.parser')
+        lista_noticias = soup.find_all('h2', class_='entry-title')
+        for noticia in lista_noticias:
+            href = noticia.find('a')['href']
+            hrefs.append(href)
+        if (soup.find('svg', class_='svg-icon') and i < 2):
+            actual = re.sub('https://noticiasparamunicipios.com/','https://noticiasparamunicipios.com/page/' + str(i) + '/', url)
+            i = i + 1
+        else:
+            puntero = False
+    #print(len(hrefs))
+    #print(hrefs)
+    return hrefs
+
+# funcion 2: esta funcion obtiene los datos de cada item de la página noticiasparamunicipios.com
+def scrapear_noticia_municipios(url_privada):
+    soupNoticia = BeautifulSoup(requests.get(url_privada, headers=headers).text, 'html.parser')
+    content = soupNoticia.find('div', {'class':'entry-content'})
+    try:
+        texto = " ".join([p.text for p in content.find_all('p')])
+    except: 
+        texto = 'No texto'
+    return texto
+
+# esta funcion obtiene una lista con los datos de todas las noticias de la página noticiasmunicipiosmadrid.com
+def scraper_noticasmunipiosmadrid(url):
+    modelo = joblib.load('modelo.bin') #../resources/py/
+    url_filtrada = filtrar_localidad_municipios(url)
+    response = requests.get(url_filtrada)
+    if response.status_code != 200:
+        print("Error fetching page")
+        exit()
+    else:
+        lista_urls = obtener_url_privadas_municipios(url_filtrada)
+        collecion = []
+        for href in lista_urls:
+            texto = scrapear_noticia_municipios(href)
+            tokens = tokenizar_texto(texto)
+            palabras = limpiar_texto(tokens)
+            texto_limpio = stemming(palabras)
+            collecion.append(texto_limpio)
+        pred = predecir_clases(modelo, collecion)
+        res = resultados(pred)
+        return res
+
+def calcular_media(lista_dicc):
+    total_odio = 0.0
+    total_no_odio = 0.0
+    for dicc in lista_dicc:
+        total_odio += dicc["Odio"]
+        total_no_odio += dicc["No Odio"]
+    media_odio = total_odio / len(lista_dicc)
+    media_no_odio = total_no_odio / len(lista_dicc)
+    return {'Media Odio': media_odio, 'Media No Odio': media_no_odio}
+
+dicc1 = scraper_elmundo(baseurl_mundo) 
+dicc2 = scraper_20minutos(baseurl)
+#dicc3 = scraper_noticasmunipiosmadrid(baseurl)
+
+lista_pred_scrapers = []
+lista_pred_scrapers.append(dicc1)
+lista_pred_scrapers.append(dicc2)
+#lista_pred_scrapers.append(dicc3)
+
+print(calcular_media(lista_pred_scrapers))
 
