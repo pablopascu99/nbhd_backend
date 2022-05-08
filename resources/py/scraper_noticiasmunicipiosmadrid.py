@@ -1,5 +1,4 @@
 import re
-from attr import attr, attrs
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd

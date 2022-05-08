@@ -50,13 +50,15 @@ def resultados(predicciones: list):
             odio += 1
         else:
             no_odio += 1
-    return {"Odio": odio/len(predicciones) * 100, "No Odio": no_odio/len(predicciones) * 100}
-
-# php_param = sys.argv[1]
+    return {"Odio": odio/len(predicciones) * 100 , "No Odio":  no_odio/len(predicciones) * 100}
 
 # direccion base del scraper
 # a esta dirección se le aplicaran diferentes filtros y formatos segun las opciones del usuario
 baseurl = "https://www.20minutos.es/"
+
+# direccion base del scraper
+# a esta dirección se le aplicaran diferentes filtros y formatos segun las opciones del usuario
+baseurl_mundo = "https://ariadna.elmundo.es/"
 
 # declaramos los headers para la petición
 headers = {
@@ -117,12 +119,86 @@ def scraper_20minutos(url):
             texto_limpio = stemming(palabras)
             collecion.append(texto_limpio)
         pred = predecir_clases(modelo, collecion)
-        res = resultados(pred)
-        return res
+        res_20mins = resultados(pred)
+        return res_20mins
 
-    # output: lista de diccionarios por cada noticia: [{datos noticia 1},{datos noticia 2}]
+# funcion aux 2: esta funcion filtra la página elmundo.com por localidad para obtener la url
+def filtrar_localidad_mundo(base_url):
+    localidad = php_param
+    localidad_adaptada = localidad.replace(" ", "+")
+    if localidad_adaptada: 
+        url_filtrada = base_url + "buscador/archivo.html?q=" + localidad_adaptada + "&b_avanzada="
+    return url_filtrada
 
-#print(filtrar_localidad(baseurl))
-#obtener_url_privadas(baseurl)
+# funcion 1: esta funcion obtiene las urls privadas de cada item, además se realiza la paginacion
+def obtener_url_privadas_mundo(url):
+    #print(url)
+    hrefs = []
+    puntero = True
+    actual = url
+    i = 1
+    while(puntero):
+        soup = BeautifulSoup(requests.get(actual, headers=headers).text, 'html.parser')
+        lista_noticias = soup.find_all('h3')
+        for noticia in lista_noticias:
+            href = noticia.find('a')['href']
+            hrefs.append(href)
+        lis = soup.find_all('li')
+        for li in lis:
+            if li.text == "Siguiente »":
+                elemento = li
+        #nxt = soup.find(lambda tag:soup.name=="li" and "Siguiente" in tag.text)
+        #siguiente = soup.find_all('li', string="Siguiente")
+        if ((elemento) and len(hrefs) < 50):
+            actual = re.sub('&b_avanzada=','&t=1&i=' + str(i) + '1&n=10&fd=0&td=0&w=70&s=1&no_acd=1', url)
+            i = i + 1
+        else:
+            puntero = False
+    #print(len(hrefs))
+    #print(i)
+    #print(hrefs)
+    return hrefs
+
+
+# funcion 2: esta funcion obtiene los datos de cada item de la página elmundo.com
+def scrapear_noticia_mundo(url_privada):
+    soupNoticia = BeautifulSoup(requests.get(url_privada, headers=headers).text, 'html.parser')
+    premium = soupNoticia.find('div', {'class':'ue-c-article__premium-tag'})
+    texto=""
+    if premium is None:
+        try:
+            estructuraTexto = soupNoticia.find('div', {'class': 'ue-l-article__body ue-c-article__body'})
+            if estructuraTexto is not None: 
+                # Cogemos los p de la estructura de texto que conformaran todo el texto que necesitamos
+                childrenTexto = estructuraTexto.findChildren("p" , recursive=False)
+                for childTexto in childrenTexto:
+                    texto = texto + childTexto.text
+                    texto = re.sub('#',' ', texto)
+        except: 
+            texto = 'No texto'
+    return texto
+
+# esta funcion obtiene una lista con los datos de todas las noticias de la página elmundo.com
+def scraper_elmundo(url):
+    modelo = joblib.load('../resources/py/modelo.bin')
+    url_filtrada = filtrar_localidad_mundo(url)
+    response = requests.get(url_filtrada)
+    if response.status_code != 200:
+        print("Error fetching page")
+        exit()
+    else:
+        lista_urls = obtener_url_privadas_mundo(url_filtrada)
+        collecion = []
+        for href in lista_urls:
+            texto = scrapear_noticia_mundo(href)
+            tokens = tokenizar_texto(texto)
+            palabras = limpiar_texto(tokens)
+            texto_limpio = stemming(palabras)
+            collecion.append(texto_limpio)
+        pred = predecir_clases(modelo, collecion)
+        res_mundo = resultados(pred)
+        return res_mundo
+
+print(scraper_elmundo(baseurl_mundo)) 
 print(scraper_20minutos(baseurl))
-# si devuleve un [] es que no hay ningun item dado esa localidad y filtro
+
