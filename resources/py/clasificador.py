@@ -18,7 +18,7 @@ def tokenizar_texto(texto: str):
 
 def limpiar_texto(lista_tokens: list):
     palabras = []
-    fichero_parada = open("Lista_Stop_Words.txt", "r", encoding="utf8")
+    fichero_parada = open("../resources/py/Lista_Stop_Words.txt", "r", encoding="utf8")
     lista_parada = fichero_parada.read().split("\n")
     puntuacion = list(string.punctuation)
     lista_parada += puntuacion
@@ -36,7 +36,7 @@ def stemming(lista_palabras: list):
     return texto
 
 def predecir_clases(modelo, coleccion_noticias: list):
-    tf = TfidfVectorizer(vocabulary=joblib.load('vocabulario.bin'))
+    tf = TfidfVectorizer(vocabulary=joblib.load('../resources/py/vocabulario.bin'))
     vectores_noticias = tf.fit_transform(coleccion_noticias).toarray()
     matriz_idf = pd.DataFrame(vectores_noticias, columns=tf.get_feature_names_out())
     predicciones = modelo.predict(matriz_idf)
@@ -107,7 +107,7 @@ def scrapear_noticia(url_privada):
 
 # esta funcion obtiene una lista con los datos de todas las noticias de la página 20minutos.com
 def scraper_20minutos(url):
-    modelo = joblib.load('modelo.bin')
+    modelo = joblib.load('../resources/py/modelo.bin')
     url_filtrada = filtrar_localidad(url)
     response = requests.get(url_filtrada)
     if response.status_code != 200:
@@ -184,7 +184,7 @@ def scrapear_noticia_mundo(url_privada):
 
 # esta funcion obtiene una lista con los datos de todas las noticias de la página elmundo.com
 def scraper_elmundo(url):
-    modelo = joblib.load('modelo.bin') #../resources/py/
+    modelo = joblib.load('../resources/py/modelo.bin') #../resources/py/
     url_filtrada = filtrar_localidad_mundo(url)
     response = requests.get(url_filtrada)
     if response.status_code != 200:
@@ -245,7 +245,7 @@ def scrapear_noticia_municipios(url_privada):
 
 # esta funcion obtiene una lista con los datos de todas las noticias de la página noticiasmunicipiosmadrid.com
 def scraper_noticasmunipiosmadrid(url):
-    modelo = joblib.load('modelo.bin') #../resources/py/
+    modelo = joblib.load('../resources/py/modelo.bin') #../resources/py/
     url_filtrada = filtrar_localidad_municipios(url)
     response = requests.get(url_filtrada)
     if response.status_code != 200:

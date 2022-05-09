@@ -91,13 +91,11 @@ def obtener_url_privadas(url):
 def scrapear_inmueble(url_privada):
     soup = BeautifulSoup(requests.get(url_privada, headers=headers).text, 'html.parser')
     try:
-        precio = soup.find('span', class_='d-block price').text.strip()
-        precio = unicodedata.encode('ascii','ignore')
+        precio = soup.find('span', class_='d-block price').text.strip().encode(encoding="ascii",errors="ignore").decode('ascii')
     except:
         precio = "No precio"   
-    try: 
-        nombre = soup.find('h1', id='title-realestate').text
-        nombre = unicodedata.encode('ascii','ignore')
+    try:
+        nombre = soup.find('h1', id='title-realestate').text.encode(encoding="ascii",errors="ignore").decode('ascii')
     except:
         nombre = "No nombre"
     imagenes = []
@@ -108,24 +106,25 @@ def scrapear_inmueble(url_privada):
         descripcion = re.sub(r'\"','', descripcion)
         descripcion = re.sub(r'\'','', descripcion)
         descripcion = re.sub(r'\\','', descripcion)
-        descripcion = unicodedata.encode('ascii','ignore')
+        descripcion = descripcion.encode(encoding="ascii",errors="ignore").decode('ascii')
     except:
         descripcion = "No descripcion"
+    # descripcion = unicodedata.encode('ascii','ignore')
     try:
-        habitaciones = soup.find('div', class_='icon-room').next_element.text
-        habitaciones = unicodedata.encode('ascii','ignore')
+        habitaciones = soup.find('div', class_='icon-room').next_element.text.encode(encoding="ascii",errors="ignore").decode('ascii')
     except:
         habitaciones = "No habitaciones"
+    # habitaciones = unicodedata.encode('ascii','ignore')
     try:
-        banos = soup.find('div', class_='icon-bath').next_element.text
-        banos = unicodedata.encode('ascii','ignore')
+        banos = soup.find('div', class_='icon-bath').next_element.text.encode(encoding="ascii",errors="ignore").decode('ascii')
     except:
         banos = "No banos"
+    # banos = unicodedata.encode('ascii','ignore')
     try:
-        metros2 = soup.find('div', class_='icon-meter').next_element.text
-        metros2 = unicodedata.encode('ascii','ignore')
+        metros2 = soup.find('div', class_='icon-meter').next_element.text.encode(encoding="ascii",errors="ignore").decode('ascii')
     except:
         metros2 = "No metros2"
+    # metros2 = unicodedata.encode('ascii','ignore')
     try:
         telefono = soup.find('a', class_='button call btn icon-phone-2').next_element.text
     except:
@@ -141,10 +140,11 @@ def scrapear_inmueble(url_privada):
     try:
         caracteristicas = []
         for caracteristica in soup.find_all('div', class_='extrasItem'):
-            caracteristica = unicodedata.encode('ascii','ignore')
+            caracteristica = caracteristica.encode(encoding="ascii",errors="ignore").decode('ascii')
             caracteristicas.append(caracteristica.text)
     except:
         caracteristicas = "No caracteristicas"
+    # caracteristica = unicodedata.encode('ascii','ignore')
     datos_inmueble = {
         'nombre': nombre,
         'precio': precio,
@@ -177,9 +177,9 @@ def scraper_yaencontre(url):
         for href in lista_urls:
             datos = scrapear_inmueble(href)
             lista_datos.append(datos)
-            if cont==3:
+            if cont==150:
                 break
-            cont = cont +1
+            cont=cont+1
             #print(datos)
         #print(lista_datos)
         #print("Inmuebles obtenidos")
