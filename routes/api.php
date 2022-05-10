@@ -19,4 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/localidad/{localidad}', [noticiaController::class,'localidad']);
+Route::get('/localidad/{localidad}', [noticiaController::class,'showOdio']);
+
+Route::get('/inmuebles/{localidad}/{tipo}', [noticiaController::class,'showInmuebles']);
