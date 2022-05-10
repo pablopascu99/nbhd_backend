@@ -272,7 +272,7 @@ def calcular_media(lista_dicc):
         total_no_odio += dicc["No Odio"]
     media_odio = total_odio / len(lista_dicc)
     media_no_odio = total_no_odio / len(lista_dicc)
-    return {'Media Odio': media_odio, 'Media No Odio': media_no_odio}
+    return {'media_odio': media_odio, 'media_no_odio': media_no_odio}
 
 dicc1 = scraper_elmundo(baseurl_mundo) 
 dicc2 = scraper_20minutos(baseurl)

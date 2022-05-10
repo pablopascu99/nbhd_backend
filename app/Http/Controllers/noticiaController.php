@@ -9,15 +9,21 @@ class noticiaController extends Controller
 {
     public function showOdio($localidad)
     {   
-        $c = '"..\resources\py\clasificador.py" '.$localidad;
-        $result = exec('python '.$c);
-        $json_clean = str_replace("'","\"",$result);
-        $json = json_decode($json_clean);
-        // $local = new Localizaciones;
-        // $local->odio = $json->Odio;
-        // $local->municipio = $localidad;
-        // $local->save();
-        return $json;
+        $l = Localizaciones::where('municipio', '=', $localidad)->first();
+        if ($l === null) {
+            $c = '"..\resources\py\clasificador.py" '.$localidad;
+            $result = exec('python '.$c);
+            $json_clean = str_replace("'","\"",$result);
+            $json = json_decode($json_clean);
+            $local = new Localizaciones;
+            $local->odio = $json->media_odio;
+            $local->municipio = $localidad;
+            $local->vecesConsultado = 1;
+            $local->save();
+        } else {
+            $local = Localizaciones::where('municipio', '=', $localidad)->first();
+            $local->increment('vecesConsultado');
+        }
     }
 
     public function showInmuebles($localidad,$tipo)
