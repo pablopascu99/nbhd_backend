@@ -24,7 +24,8 @@ class noticiaController extends Controller
             $local = Localizaciones::where('municipio', '=', $localidad)->first();
             $local->increment('vecesConsultado');
         }
-        return json_encode($local);
+        $l2 = Localizaciones::where('municipio', '=', $localidad)->first();
+        return json_encode($l2);
     }
 
     public function showInmuebles($localidad,$tipo)
