@@ -29,6 +29,17 @@ for lugar in lugares:
         puntuacion_media = lugar['result']['rating']
     except:
         puntuacion_media = "Sin puntuacion media"
+    textReviews=[]
+    try:
+        reviews_text = lugar['result']['reviews']
+        for item in reviews_text:
+            # text= GoogleTranslator(source='english', target='spanish').translate(item['text'])
+            # textReviews.append(text)
+            textReviews.append(item['text'])
+    except:
+        texto = 'Not reviews'
+        # texto = GoogleTranslator(source='english', target='spanish').translate(texto)
+        textReviews.append(texto)
     place = {
         'nombre': nombre,
         'direccion': direccion,
@@ -37,6 +48,7 @@ for lugar in lugares:
         'tipo_establecimiento': tipo_establecimiento,
         'telefono': telefono,
         'puntuacion_media': puntuacion_media,
+        'reviews': textReviews,
     }
     listaLugares.append(place)
 print(listaLugares)
