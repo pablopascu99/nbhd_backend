@@ -21,11 +21,14 @@ class CreateInmueblesTable extends Migration
             $table->string('nombre');
             $table->string('m2');
             $table->string('banos');
-            $table->string('descripcion');
-            $table->float('precio');
-            $table->float('longitud');
-            $table->float('latitud');
-            $table->json('atributos');
+            $table->string('habitaciones');
+            $table->string('enlace');
+            $table->string('telefono');
+            $table->string('descripcion', '65535');
+            $table->string('precio');
+            $table->string('longitud');
+            $table->string('latitud');
+            $table->json('caracteristicas');
             $table->json('imagenes');
         });
     }

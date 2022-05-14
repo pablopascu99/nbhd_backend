@@ -22,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/localidad/{localidad}', [noticiaController::class,'showOdio']);
 
 Route::get('/inmuebles/{localidad}/{tipo}', [noticiaController::class,'showInmuebles']);
+
+// Route::get('/id_localidad/{localidad}', [noticiaController::class,'getLocationId']);

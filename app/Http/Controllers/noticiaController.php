@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Localizaciones;
+use App\Models\Inmuebles;
 
 class noticiaController extends Controller
 {
@@ -30,17 +31,41 @@ class noticiaController extends Controller
 
     public function showInmuebles($localidad,$tipo)
     {   
-        $c = '"..\resources\py\scraper_yaencontre.py" '.$localidad." ".$tipo;
-        $result = exec('python '.$c);
-        $json_clean = str_replace("'","\"",$result);
-        $json = json_decode($json_clean);
-        // $lista_nombres = array();
-    
-        // for ($i = 0; $i <= (count($json)-1); $i++) {
-        //     $data=array('nombre'=>$json[$i]->nombre,"m2"=>$json[$i]->metros2,"precio"=>$json[$i]->precio,"banos"=>$json[$i]->banos,"descripcion"=>$json[$i]->descripcion);
-        //     Inmuebles::table('student_details')->insert($data);
-        // }
-        return $json;
+        // $c = '"..\resources\py\scraper_yaencontre.py" '.$localidad." ".$tipo;
+        // $result = exec('python '.$c);
+        // $json_clean = str_replace("'","\"",$result);
+        // $json = json_decode($json_clean);
+        // return $json;
+        $local = Localizaciones::where('municipio', '=', $localidad)->first();
+        $id_localidad = $local->id;
+
+        $in = Inmuebles::where('localizaciones_id', '=', $id_localidad)->first();
+        if ($in === null) {
+            $c = '"..\resources\py\scraper_yaencontre.py" '.$localidad." ".$tipo;
+            $result = exec('python '.$c);
+            $json_clean = str_replace("'","\"",$result);
+            $json = json_decode($json_clean);
+            foreach ($json as $item) {
+                $inmueble = new Inmuebles;
+                $inmueble->nombre = $item->nombre;
+                $inmueble->precio = $item->precio;
+                $inmueble->localizaciones_id = $id_localidad;
+                $inmueble->imagenes = $item->imagenes; //mirar como meter array
+                $inmueble->descripcion = $item->descripcion;
+                $inmueble->enlace = $item->enlace;
+                $inmueble->habitaciones = $item->habitaciones;
+                $inmueble->banos = $item->banos;
+                $inmueble->m2 = $item->metros2;
+                $inmueble->telefono = $item->telefono;
+                $inmueble->latitud = $item->ubicacion[0];
+                $inmueble->longitud = $item->ubicacion[1];
+                $inmueble->caracteristicas = $item->caracteristicas;
+                $inmueble->save();
+            }
+        } else {
+            echo "hay inmueble";
+        }
+        return "ejecutado";
     }
 
 }

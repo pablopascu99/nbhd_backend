@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Inmuebles extends Model
 {
     use HasFactory;
+    protected $casts = [
+        'imagenes' => 'array',
+        'caracteristicas' => 'array'
+    ];
 }

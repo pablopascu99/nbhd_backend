@@ -140,8 +140,8 @@ def scrapear_inmueble(url_privada):
     try:
         caracteristicas = []
         for caracteristica in soup.find_all('div', class_='extrasItem'):
-            caracteristica = caracteristica.encode(encoding="ascii",errors="ignore").decode('ascii')
-            caracteristicas.append(caracteristica.text)
+            caracteristica = caracteristica.text.encode(encoding="ascii",errors="ignore").decode('ascii')
+            caracteristicas.append(caracteristica)
     except:
         caracteristicas = "No caracteristicas"
     # caracteristica = unicodedata.encode('ascii','ignore')
