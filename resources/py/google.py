@@ -1,4 +1,5 @@
 import googlemaps
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from deep_translator import GoogleTranslator
 
 ##############################################################################
@@ -30,12 +31,19 @@ for lugar in lugares:
     except:
         puntuacion_media = "Sin puntuacion media"
     textReviews=[]
+    media_analisis=0
+    cont=0
     try:
         reviews_text = lugar['result']['reviews']
         for item in reviews_text:
             # text= GoogleTranslator(source='english', target='spanish').translate(item['text'])
             # textReviews.append(text)
             textReviews.append(item['text'])
+            vs = SentimentIntensityAnalyzer()
+            vs_result = vs.polarity_scores(item['text'])['compound']
+            media_analisis = media_analisis + vs_result
+            cont=cont+1
+        media_analisis = media_analisis/cont
     except:
         texto = 'Not reviews'
         # texto = GoogleTranslator(source='english', target='spanish').translate(texto)
@@ -48,6 +56,7 @@ for lugar in lugares:
         'tipo_establecimiento': tipo_establecimiento,
         'telefono': telefono,
         'puntuacion_media': puntuacion_media,
+        'media_analisis': media_analisis,
         'reviews': textReviews,
     }
     listaLugares.append(place)
