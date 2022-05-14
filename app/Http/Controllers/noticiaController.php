@@ -31,11 +31,6 @@ class noticiaController extends Controller
 
     public function showInmuebles($localidad,$tipo)
     {   
-        // $c = '"..\resources\py\scraper_yaencontre.py" '.$localidad." ".$tipo;
-        // $result = exec('python '.$c);
-        // $json_clean = str_replace("'","\"",$result);
-        // $json = json_decode($json_clean);
-        // return $json;
         $local = Localizaciones::where('municipio', '=', $localidad)->first();
         $id_localidad = $local->id;
 
@@ -62,10 +57,9 @@ class noticiaController extends Controller
                 $inmueble->caracteristicas = $item->caracteristicas;
                 $inmueble->save();
             }
-        } else {
-            echo "hay inmueble";
         }
-        return "ejecutado";
+        $in2 = Inmuebles::where('localizaciones_id', '=', $id_localidad)->get();
+        return $in2;
     }
 
 }
