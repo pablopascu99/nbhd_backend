@@ -126,7 +126,7 @@ def scrapear_inmueble(url_privada):
         metros2 = "No metros2"
     # metros2 = unicodedata.encode('ascii','ignore')
     try:
-        telefono = soup.find('a', class_='button call btn icon-phone-2').next_element.text
+        telefono = soup.find('div', class_='icon-phone-2').next_element.next_element.text
     except:
         telefono = "No telefono"
     try:
