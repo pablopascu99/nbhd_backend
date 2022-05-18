@@ -13,6 +13,15 @@ baseurl = "https://ariadna.elmundo.es/"
 headers = {
     'User-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36'
 }
+
+regex = re.compile(
+        r'^(?:http|ftp)s?://' # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+        r'localhost|' #localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+        r'(?::\d+)?' # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
 # funcion aux 2: esta funcion filtra la página elmundo.com por localidad para obtener la url
 def filtrar_localidad(base_url):
     localidad = php_param
@@ -33,7 +42,8 @@ def obtener_url_privadas(url):
         lista_noticias = soup.find_all('h3')
         for noticia in lista_noticias:
             href = noticia.find('a')['href']
-            hrefs.append(href)
+            if re.match(regex, href) is not None:
+                hrefs.append(href)
         lis = soup.find_all('li')
         for li in lis:
             if li.text == "Siguiente »":
@@ -93,7 +103,7 @@ def scraper_elmundo(url):
         print("Error fetching page")
         exit()
     else:
-        print("Pagina encontrada")
+        #print("Pagina encontrada")
         lista_urls_privadas = obtener_url_privadas(url_filtrada)
         lista_datos = []
         for href in lista_urls_privadas:
@@ -102,7 +112,7 @@ def scraper_elmundo(url):
             #print(datos)
         #print(lista_urls_privadas)
         #print(lista_datos)
-        print("Noticias obtenidas")
+        #print("Noticias obtenidas")
    # output: lista de diccionarios por cada noticia: [{datos noticia 1},{datos noticia 2}]
     return lista_datos
 
