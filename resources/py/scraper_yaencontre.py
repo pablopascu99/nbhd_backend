@@ -34,7 +34,7 @@ def transformar_localidad_url(cadena):
         cadena_final = los_cadena + " los"
     else:
         cadena_final = cadena
-    cadena_url = re.sub(r' ', '-', cadena_final)
+    cadena_url = re.sub(r' ', '-', cadena_final).lower()
     return cadena_url
 
 # funcion aux 2: esta funcion filtra la página yaencontre.com por localidad y tipo de inmueble para obtener la url
@@ -126,7 +126,7 @@ def scrapear_inmueble(url_privada):
         metros2 = "No metros2"
     # metros2 = unicodedata.encode('ascii','ignore')
     try:
-        telefono = soup.find('div', class_='icon-phone-2').next_element.next_element.text.text.encode(encoding="ascii",errors="ignore").decode('ascii')
+        telefono = soup.find('div', class_='icon-phone-2').next_element.next_element.text.encode(encoding="ascii",errors="ignore").decode('ascii')
     except:
         telefono = "No telefono"
     try:
@@ -178,7 +178,7 @@ def scraper_yaencontre(url):
         for href in lista_urls:
             datos = scrapear_inmueble(href)
             lista_datos.append(datos)
-            if cont==150:
+            if cont==50:
                 break
             cont=cont+1
             #print(datos)

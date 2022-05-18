@@ -275,12 +275,12 @@ def calcular_media(lista_dicc):
     return {'media_odio': media_odio, 'media_no_odio': media_no_odio}
 
 dicc1 = scraper_elmundo(baseurl_mundo) 
-dicc2 = scraper_20minutos(baseurl)
+#dicc2 = scraper_20minutos(baseurl)
 #dicc3 = scraper_noticasmunipiosmadrid(baseurl)
 
 lista_pred_scrapers = []
 lista_pred_scrapers.append(dicc1)
-lista_pred_scrapers.append(dicc2)
+#lista_pred_scrapers.append(dicc2)
 #lista_pred_scrapers.append(dicc3)
 
 print(calcular_media(lista_pred_scrapers))
