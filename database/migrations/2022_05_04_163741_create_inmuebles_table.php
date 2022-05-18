@@ -25,7 +25,7 @@ class CreateInmueblesTable extends Migration
             $table->string('habitaciones');
             $table->string('enlace');
             $table->string('telefono');
-            $table->binary('descripcion');
+            $table->text('descripcion');
             $table->string('precio');
             $table->string('longitud');
             $table->string('latitud');
