@@ -18,13 +18,15 @@ class CreateLugaresInteresTable extends Migration
             $table->timestamps();
             $table->unsignedInteger('localizaciones_id');
             $table->foreign('localizaciones_id')->references('id')->on('localizaciones')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('tipo_establecimiento'); 
-            $table->float('puntuacion_media'); 
-            $table->string('telefono'); 
-            $table->float('latitud'); 
+            $table->string('nombre');
+            $table->string('direccion');
+            $table->float('latitud');
             $table->float('longitud');
-            $table->string('direccion'); 
+            $table->json('tipo_establecimiento'); 
+            $table->string('telefono');
+            $table->float('puntuacion_media');  
             $table->float('media_analisis');
+            $table->json('reviews');
         });
     }
 

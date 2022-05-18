@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Localizaciones;
 use App\Models\Inmuebles;
+use App\Models\LugaresInteres;
 
 class noticiaController extends Controller
 {
@@ -60,6 +61,17 @@ class noticiaController extends Controller
         }
         $in2 = Inmuebles::where('localizaciones_id', '=', $id_localidad)->get();
         return $in2;
+    }
+
+
+    public function showLugarInteres($latitud,$longitud)
+    {   
+        $c = '"..\resources\py\google.py" '.$latitud." ".$longitud;
+        $result = exec('python '.$c);
+        echo $result;
+        $json_clean = str_replace("'","\"",$result);
+        $json = json_decode($json_clean);
+        return $json;
     }
 
 }
