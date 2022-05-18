@@ -14,6 +14,14 @@ headers = {
     'User-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36'
 }
 
+regex = re.compile(
+        r'^(?:http|ftp)s?://' # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+        r'localhost|' #localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+        r'(?::\d+)?' # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
 # funcion aux 2: esta funcion filtra la página 20minutos.com por localidad para obtener la url
 def filtrar_localidad(base_url):
     localidad = php_param
@@ -35,7 +43,8 @@ def obtener_url_privadas(url):
         for noticia in lista_noticias:
             h1 = noticia.find('h1')
             href = h1.find('a')['href']
-            hrefs.append(href)
+            if re.match(regex, href) is not None:
+                hrefs.append(href)
         if (soup.find('li', class_='last') and i < 5):
             actual = re.sub('busqueda/','busqueda/' + str(i) + '/', url)
             i = i + 1
