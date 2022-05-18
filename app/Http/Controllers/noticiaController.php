@@ -46,12 +46,13 @@ class noticiaController extends Controller
                 $inmueble->nombre = $item->nombre;
                 $inmueble->precio = $item->precio;
                 $inmueble->localizaciones_id = $id_localidad;
-                $inmueble->imagenes = $item->imagenes; //mirar como meter array
+                $inmueble->imagenes = $item->imagenes;
                 $inmueble->descripcion = $item->descripcion;
                 $inmueble->enlace = $item->enlace;
                 $inmueble->habitaciones = $item->habitaciones;
                 $inmueble->banos = $item->banos;
                 $inmueble->m2 = $item->metros2;
+                $inmueble->tipo = $item->tipo;
                 $inmueble->telefono = $item->telefono;
                 $inmueble->latitud = $item->ubicacion[0];
                 $inmueble->longitud = $item->ubicacion[1];

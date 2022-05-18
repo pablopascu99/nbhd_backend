@@ -75,7 +75,7 @@ def obtener_url_privadas(url):
         soup = BeautifulSoup(requests.get(actual, headers=headers).text, 'html.parser')
         lista_inmuebles = soup.find_all('article', class_='ThinPropertyList property-info pointer pos-rel')
         for inmueble in lista_inmuebles:
-            h2 = inmueble.find('h2', class_='title d-ellipsis logo-aside')
+            h2 = inmueble.find('h3', class_='title d-ellipsis logo-aside')
             href = h2.find('a')['href']
             hrefs.append(baseurl + href)
         if soup.find('button',class_='button next-button'):
@@ -126,7 +126,7 @@ def scrapear_inmueble(url_privada):
         metros2 = "No metros2"
     # metros2 = unicodedata.encode('ascii','ignore')
     try:
-        telefono = soup.find('div', class_='icon-phone-2').next_element.next_element.text
+        telefono = soup.find('div', class_='icon-phone-2').next_element.next_element.text.text.encode(encoding="ascii",errors="ignore").decode('ascii')
     except:
         telefono = "No telefono"
     try:
@@ -148,6 +148,7 @@ def scrapear_inmueble(url_privada):
     datos_inmueble = {
         'nombre': nombre,
         'precio': precio,
+        'tipo': php_param_2,
         'imagenes': imagenes,
         'descripcion': descripcion,
         'enlace': url_privada,
