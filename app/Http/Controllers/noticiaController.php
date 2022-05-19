@@ -64,6 +64,11 @@ class noticiaController extends Controller
         return $in2;
     }
 
+    public function getInmueble($inmuebleId)
+    {   
+        $inmueble = Inmuebles::where('id', '=', $inmuebleId)->first();
+        return $inmueble;
+    }
 
     public function showLugarInteres($latitud,$longitud)
     {   

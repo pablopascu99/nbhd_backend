@@ -23,6 +23,6 @@ Route::get('/localidad/{localidad}', [noticiaController::class,'showOdio']);
 
 Route::get('/inmuebles/{localidad}/{tipo}', [noticiaController::class,'showInmuebles']);
 
-// Route::get('/id_localidad/{localidad}', [noticiaController::class,'getLocationId']);
+Route::get('/inmuebles/{inmuebleId}', [noticiaController::class,'getInmueble']);
 
 Route::get('/lugar_interes/{latitud}/{longitud}', [noticiaController::class,'showLugarInteres']);
