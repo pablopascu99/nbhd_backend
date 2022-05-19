@@ -18,12 +18,9 @@ class CreateComentariosTable extends Migration
             $table->timestamps();
             $table->unsignedInteger('interes_id');
             $table->foreign('interes_id')->references('id')->on('lugares_interes')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('autor'); 
-            $table->string('texto'); 
-            $table->date('fecha'); 
-            $table->float('puntuacion'); 
-            $table->float('latitud'); 
-            $table->float('longitud');
+            $table->string('autor')->nullable(); 
+            $table->text('texto')->nullable(); 
+            $table->string('puntuacion')->nullable(); 
         });
     }
 

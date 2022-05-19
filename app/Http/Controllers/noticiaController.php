@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Localizaciones;
 use App\Models\Inmuebles;
 use App\Models\LugaresInteres;
+use App\Models\Comentarios;
 
 class noticiaController extends Controller
 {
@@ -72,12 +73,38 @@ class noticiaController extends Controller
 
     public function showLugarInteres($latitud,$longitud)
     {   
-        $c = '"..\resources\py\google.py" '.$latitud." ".$longitud;
-        $result = exec('python '.$c);
-        echo $result;
-        $json_clean = str_replace("'","\"",$result);
-        $json = json_decode($json_clean);
-        return $json;
+
+        $interes = LugaresInteres::where('latitudRadius', '=', $latitud)->first();
+        if ($interes === null) {
+            $c = '"..\resources\py\google.py" '.$latitud." ".$longitud;
+            $result = exec('python '.$c);
+            $json_clean = str_replace("'","\"",$result);
+            $json = json_decode($json_clean);
+            foreach ($json as $item) {
+                $i = new LugaresInteres;
+                $i->nombre = $item->nombre;
+                $i->direccion = $item->direccion;
+                $i->latitud = $item->latitud;
+                $i->longitud = $item->longitud;
+                $i->latitudRadius = $latitud;
+                $i->longitudRadius = $longitud;
+                $i->telefono = $item->telefono;
+                $i->puntuacion_media = $item->puntuacion_media;
+                $i->media_analisis = $item->media_analisis;
+                $i->save();
+                $json2 = $item->reviews;
+                foreach ($json2 as $item2) {
+                    $c = new Comentarios;
+                    $c->autor = $item2->autor;
+                    $c->texto = $item2->texto;
+                    $c->interes_id = $i->id;
+                    $c->puntuacion = $item2->rating;
+                    $c->save();
+                }
+            }
+        }
+        $interes2 = LugaresInteres::where('latitudRadius', '=', $latitud)->get();
+        return $interes2;
     }
 
 }

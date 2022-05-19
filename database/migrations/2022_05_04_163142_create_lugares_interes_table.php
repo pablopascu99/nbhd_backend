@@ -16,17 +16,18 @@ class CreateLugaresInteresTable extends Migration
         Schema::create('lugares_interes', function (Blueprint $table) {
             $table->increments('id'); 
             $table->timestamps();
-            $table->unsignedInteger('localizaciones_id');
-            $table->foreign('localizaciones_id')->references('id')->on('localizaciones')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('nombre');
-            $table->string('direccion');
-            $table->float('latitud');
-            $table->float('longitud');
-            $table->json('tipo_establecimiento'); 
-            $table->string('telefono');
-            $table->float('puntuacion_media');  
-            $table->float('media_analisis');
-            $table->json('reviews');
+            /*$table->unsignedInteger('localizaciones_id');
+            $table->foreign('localizaciones_id')->references('id')->on('localizaciones')->onDelete('cascade')->onUpdate('cascade');*/
+            $table->string('nombre')->nullable();
+            $table->text('direccion')->nullable();
+            $table->string('latitud')->nullable();
+            $table->string('longitud')->nullable();
+            $table->string('longitudRadius')->nullable();
+            $table->string('latitudRadius')->nullable();
+            $table->json('tipo_establecimiento')->nullable(); 
+            $table->string('telefono')->nullable();
+            $table->string('puntuacion_media')->nullable();  
+            $table->string('media_analisis')->nullable();
         });
     }
 

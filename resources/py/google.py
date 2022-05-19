@@ -1,3 +1,4 @@
+import re
 import sys
 import googlemaps
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
@@ -26,7 +27,11 @@ for lugar in lugares:
     lat = lugar['result']['geometry']['location']['lat']
     lng = lugar['result']['geometry']['location']['lng']
     nombre = lugar['result']['name']
-    direccion = lugar['result']['formatted_address'] #Puede que no tenga alguno(revisar)
+    nombre = re.sub(r"\'","", nombre)
+    nombre = re.sub(r'\"','', nombre).encode(encoding="ascii",errors="ignore").decode('ascii')
+    direccion = lugar['result']['formatted_address']
+    direccion = re.sub(r"\'","", direccion)
+    direccion = re.sub(r'\"','', direccion).encode(encoding="ascii",errors="ignore").decode('ascii')
     try:
         telefono = lugar['result']['formatted_phone_number']
     except:
@@ -48,9 +53,15 @@ for lugar in lugares:
             vs_result = vs.polarity_scores(item['text'])['compound']
             media_analisis = media_analisis + vs_result
             cont=cont+1
+            autor = item['author_name']
+            autor = re.sub(r"\'","", autor)
+            autor = re.sub(r'\"','', autor).encode(encoding="ascii",errors="ignore").decode('ascii')
+            texto = item['text']
+            texto = re.sub(r"\'","", texto)
+            texto = re.sub(r'\"','', texto).encode(encoding="ascii",errors="ignore").decode('ascii')
             review = {
-                'autor': item['author_name'],
-                'texto': item['text'].encode(encoding="ascii",errors="ignore").decode('ascii'),
+                'autor': autor,
+                'texto': texto,
                 'rating': item['rating']
             }
             reviews.append(review)

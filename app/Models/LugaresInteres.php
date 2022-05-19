@@ -10,7 +10,6 @@ class LugaresInteres extends Model
     use HasFactory;
 
     protected $casts = [
-        'tipo_establecimiento' => 'array',
-        'reviews' => 'array'
+        'tipo_establecimiento' => 'array'
     ];
 }
