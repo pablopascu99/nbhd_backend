@@ -36,7 +36,7 @@ class noticiaController extends Controller
         $local = Localizaciones::where('municipio', '=', $localidad)->first();
         $id_localidad = $local->id;
 
-        $in = Inmuebles::where('localizaciones_id', '=', $id_localidad)->first();
+        $in = Inmuebles::where('localizaciones_id', '=', $id_localidad)->where('tipo', '=', $tipo)->first();
         if ($in === null) {
             $c = '"..\resources\py\scraper_yaencontre.py" '.$localidad." ".$tipo;
             $result = exec('python '.$c);
@@ -61,7 +61,7 @@ class noticiaController extends Controller
                 $inmueble->save();
             }
         }
-        $in2 = Inmuebles::where('localizaciones_id', '=', $id_localidad)->get();
+        $in2 = Inmuebles::where('localizaciones_id', '=', $id_localidad)->where('tipo', '=', $tipo)->get();
         return $in2;
     }
 
