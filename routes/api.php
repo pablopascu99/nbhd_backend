@@ -15,10 +15,6 @@ use App\Http\Controllers\NoticiaController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::get('/localidad/{localidad}', [noticiaController::class,'showOdio']);
 
 Route::get('/inmuebles/{localidad}/{tipo}', [noticiaController::class,'showInmuebles']);
@@ -26,3 +22,14 @@ Route::get('/inmuebles/{localidad}/{tipo}', [noticiaController::class,'showInmue
 Route::get('/inmuebles/{inmuebleId}', [noticiaController::class,'getInmueble']);
 
 Route::get('/lugar_interes/{latitud}/{longitud}', [noticiaController::class,'showLugarInteres']);
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'v1/auth'
+
+], function ($router) {
+    Route::post('login', [\App\Http\Controllers\AuthController::class, 'login'])->name('login');
+    Route::post('logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+    Route::post('refresh', [\App\Http\Controllers\AuthController::class, 'refresh'])->name('refresh');
+    Route::post('me', [\App\Http\Controllers\AuthController::class, 'me'])->name('me');
+});
