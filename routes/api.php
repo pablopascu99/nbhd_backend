@@ -26,6 +26,10 @@ Route::get('/inmuebles/{inmuebleId}', [noticiaController::class,'getInmueble']);
 
 Route::get('/lugar_interes/{latitud}/{longitud}', [noticiaController::class,'showLugarInteres']);
 
+Route::get('/lugar_interes/{lugarInteresId}', [noticiaController::class,'getLugarInteres']);
+
+Route::get('/reviews/{lugarInteresId}', [noticiaController::class,'showReviews']);
+
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'

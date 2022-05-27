@@ -107,4 +107,23 @@ class noticiaController extends Controller
         return $interes2;
     }
 
+    public function getLugarInteres($lugarInteresId)
+    {   
+        $lugarInteres = LugaresInteres::where('id', '=', $lugarInteresId)->first();
+        return $lugarInteres;
+    }
+
+    public function showReviews($lugarInteresId)
+    {   
+        $lugarInteres = LugaresInteres::where('id', '=', $lugarInteresId)->first();
+        if ($lugarInteres === null) {
+            return "No existe el lugar de interes";
+        } else {
+            $reviews = Comentarios::where('interes_id', '=', $lugarInteresId)->get();
+            return $reviews;
+        }
+    }
+
+
+
 }
