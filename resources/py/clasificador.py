@@ -280,7 +280,7 @@ dicc2 = scraper_20minutos(baseurl)
 
 lista_pred_scrapers = []
 #lista_pred_scrapers.append(dicc1)
-#lista_pred_scrapers.append(dicc2)
+lista_pred_scrapers.append(dicc2)
 #lista_pred_scrapers.append(dicc3)
 
 print(calcular_media(lista_pred_scrapers))
