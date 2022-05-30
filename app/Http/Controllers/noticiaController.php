@@ -124,6 +124,9 @@ class noticiaController extends Controller
         }
     }
 
-
+    public function get_top_municipios($num){
+        $municipios = Localizaciones::orderBy('vecesConsultado', 'desc')->take($num)->get();
+        return json_encode($municipios);
+    }
 
 }

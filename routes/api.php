@@ -30,6 +30,8 @@ Route::get('/lugar_interes/{lugarInteresId}', [noticiaController::class,'getLuga
 
 Route::get('/reviews/{lugarInteresId}', [noticiaController::class,'showReviews']);
 
+Route::get('/get_top_municipios/{num}', [noticiaController::class, 'get_top_municipios']);
+
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
