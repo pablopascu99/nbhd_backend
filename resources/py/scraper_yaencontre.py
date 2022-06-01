@@ -136,7 +136,7 @@ def scrapear_inmueble(url_privada):
         ubicaciones.append(ubicacionesGroup.group(1))
         ubicaciones.append(ubicacionesGroup.group(2))
     except:
-        ubicaciones = "no ubicacion"
+        ubicaciones = [0,0]
     try:
         caracteristicas = []
         for caracteristica in soup.find_all('div', class_='extrasItem'):
