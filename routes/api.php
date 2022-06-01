@@ -32,6 +32,13 @@ Route::get('/reviews/{lugarInteresId}', [noticiaController::class,'showReviews']
 
 Route::get('/get_top_municipios/{num}', [noticiaController::class, 'get_top_municipios']);
 
+Route::get('/usuarios/{id}', [noticiaController::class, 'getUser']);
+
+Route::get('/usuarios', [noticiaController::class, 'getUsuarios']);
+
+Route::put('/usuarios/actualizar/{id}', [noticiaController::class, 'updateUser']);
+
+
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
@@ -40,5 +47,5 @@ Route::group([
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);    
+    Route::get('/user-profile', [AuthController::class, 'userProfile']);   
 });

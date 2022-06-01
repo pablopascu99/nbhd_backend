@@ -7,6 +7,8 @@ use App\Models\Localizaciones;
 use App\Models\Inmuebles;
 use App\Models\LugaresInteres;
 use App\Models\Comentarios;
+use App\Models\User;
+use App\Models\Reviews;
 
 class noticiaController extends Controller
 {
@@ -127,6 +129,28 @@ class noticiaController extends Controller
     public function get_top_municipios($num){
         $municipios = Localizaciones::orderBy('vecesConsultado', 'desc')->take($num)->get();
         return json_encode($municipios);
+    }
+
+    public function getUser($id) {
+        $user = User::where('id', '=', $id)->first();
+        return $user;
+    }
+
+    public function getUsuarios() {
+        $usuarios = User::all();
+        return $usuarios;
+    }
+
+    public function updateUser(Request $request, $id) {
+        $user = User::where('id', '=', $id)->first();
+        if ($user === null) {
+            return "No existe el usuario";
+        } else {
+            $user->email = $request->input('email');
+            $user->password = bcrypt($request->input('password'));
+            $user->save();
+            return 200;
+        }
     }
 
 }
