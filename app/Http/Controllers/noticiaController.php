@@ -131,16 +131,6 @@ class noticiaController extends Controller
         return json_encode($municipios);
     }
 
-    public function getUser($id) {
-        $user = User::where('id', '=', $id)->first();
-        return $user;
-    }
-
-    public function getUsuarios() {
-        $usuarios = User::all();
-        return $usuarios;
-    }
-
     public function updateUser(Request $request, $id) {
         $user = User::where('id', '=', $id)->first();
         if ($user === null) {
