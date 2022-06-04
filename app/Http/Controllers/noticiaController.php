@@ -27,7 +27,7 @@ class noticiaController extends Controller
             $local->save();
         }
         // delete $l si el updated_at se creo hace 30 dias
-        if (strtotime($l->updated_at) > strtotime('-30 days')) {
+        if (strtotime($l->updated_at) < strtotime('-30 days')) {
             $l->delete();
             $l1 = Localizaciones::where('municipio', '=', $localidad)->first();
             if ($l1 === null) {
@@ -81,7 +81,7 @@ class noticiaController extends Controller
             }
         } 
         // delete $l si el updated_at se creo hace 30 dias
-        if (strtotime($in->updated_at) > strtotime('-30 days')) {
+        if (strtotime($in->updated_at) < strtotime('-30 days')) {
             $in->delete();
             $in = Inmuebles::where('localizaciones_id', '=', $id_localidad)->where('tipo', '=', $tipo)->first();
             if ($in === null) {
