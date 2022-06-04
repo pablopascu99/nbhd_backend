@@ -25,7 +25,24 @@ class noticiaController extends Controller
             $local->municipio = $localidad;
             $local->vecesConsultado = 1;
             $local->save();
-        } else {
+        }
+        // delete $l si el updated_at se creo hace 30 dias
+        if (strtotime($l->updated_at) > strtotime('-30 days')) {
+            $l->delete();
+            $l1 = Localizaciones::where('municipio', '=', $localidad)->first();
+            if ($l1 === null) {
+                $c = '"..\resources\py\clasificador.py" '.$localidad;
+                $result = exec('python '.$c);
+                $json_clean = str_replace("'","\"",$result);
+                $json = json_decode($json_clean);
+                $local = new Localizaciones;
+                $local->odio = $json->media_odio;
+                $local->municipio = $localidad;
+                $local->vecesConsultado = 1;
+                $local->save();
+            }
+        } 
+        else {
             $local = Localizaciones::where('municipio', '=', $localidad)->first();
             $local->increment('vecesConsultado');
         }
@@ -62,6 +79,35 @@ class noticiaController extends Controller
                 $inmueble->caracteristicas = $item->caracteristicas;
                 $inmueble->save();
             }
+        } 
+        // delete $l si el updated_at se creo hace 30 dias
+        if (strtotime($in->updated_at) > strtotime('-30 days')) {
+            $in->delete();
+            $in = Inmuebles::where('localizaciones_id', '=', $id_localidad)->where('tipo', '=', $tipo)->first();
+            if ($in === null) {
+                $c = '"..\resources\py\scraper_yaencontre.py" '.$localidad." ".$tipo;
+                $result = exec('python '.$c);
+                $json_clean = str_replace("'","\"",$result);
+                $json = json_decode($json_clean);
+                foreach ($json as $item) {
+                    $inmueble = new Inmuebles;
+                    $inmueble->nombre = $item->nombre;
+                    $inmueble->precio = $item->precio;
+                    $inmueble->localizaciones_id = $id_localidad;
+                    $inmueble->imagenes = $item->imagenes;
+                    $inmueble->descripcion = $item->descripcion;
+                    $inmueble->enlace = $item->enlace;
+                    $inmueble->habitaciones = $item->habitaciones;
+                    $inmueble->banos = $item->banos;
+                    $inmueble->m2 = $item->metros2;
+                    $inmueble->tipo = $item->tipo;
+                    $inmueble->telefono = $item->telefono;
+                    $inmueble->latitud = $item->ubicacion[0];
+                    $inmueble->longitud = $item->ubicacion[1];
+                    $inmueble->caracteristicas = $item->caracteristicas;
+                    $inmueble->save();
+                }
+            } 
         }
         $in2 = Inmuebles::where('localizaciones_id', '=', $id_localidad)->where('tipo', '=', $tipo)->get();
         return $in2;
