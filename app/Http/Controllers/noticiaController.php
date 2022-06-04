@@ -192,6 +192,8 @@ class noticiaController extends Controller
             $user->save();
             return 200;
         }
+    }
+
     public function get_id_localidad($localidad){
         $id = Localizaciones::select('id')->where('municipio', "=", $localidad)->first();
         return $id;

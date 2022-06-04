@@ -34,6 +34,10 @@ Route::get('/get_top_municipios/{num}', [noticiaController::class, 'get_top_muni
 
 Route::put('/usuarios/actualizar/{id}', [noticiaController::class, 'updateUser']);
 
+Route::get('/get_max_municipio_odio', [noticiaController::class, 'municipo_max_odio']);
+
+Route::get('/get_num_inmuebles/{num}', [noticiaController::class, 'get_num_inmuebles']);
+
 
 Route::group([
     'middleware' => 'api',
