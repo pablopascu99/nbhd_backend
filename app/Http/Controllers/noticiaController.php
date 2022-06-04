@@ -126,6 +126,11 @@ class noticiaController extends Controller
         }
     }
 
+    public function municipo_max_odio(){
+        $maxOdio = localizaciones::orderBy('odio', 'desc')->first();
+        return json_encode($maxOdio);
+    }
+
     public function get_top_municipios($num){
         $municipios = Localizaciones::orderBy('vecesConsultado', 'desc')->take($num)->get();
         return json_encode($municipios);
@@ -141,6 +146,25 @@ class noticiaController extends Controller
             $user->save();
             return 200;
         }
+    public function get_id_localidad($localidad){
+        $id = Localizaciones::select('id')->where('municipio', "=", $localidad)->first();
+        return $id;
+    }
+
+    public function get_num_inmuebles($num){
+        $municipos_id = array();
+        $respuesta = array();
+        $top_municipios = $this->get_top_municipios($num);
+        for($i = 0; $i < count($top_municipios); $i++){
+            $id = $this->get_id_localidad($top_municipios[$i]['municipio']);
+            array_push($municipos_id, $id);
+        }
+        for($i = 0; $i < count($municipos_id); $i++){
+            $num_inmuebles = Inmuebles::where("localizaciones_id", "=", $municipos_id[$i]['id'])->count();
+            $dato = array($top_municipios[$i]['municipio'] => $num_inmuebles);
+            array_push($respuesta, $dato);
+        }
+        return $respuesta;
     }
 
 }
