@@ -204,12 +204,22 @@ class noticiaController extends Controller
         return json_encode($municipios);
     }
 
-    public function updateUser(Request $request, $id) {
+    public function updateUserEmail(Request $request, $id) {
         $user = User::where('id', '=', $id)->first();
         if ($user === null) {
             return "No existe el usuario";
         } else {
             $user->email = $request->input('email');
+            $user->save();
+            return 200;
+        }
+    }
+
+    public function updateUserPass(Request $request, $id) {
+        $user = User::where('id', '=', $id)->first();
+        if ($user === null) {
+            return "No existe el usuario";
+        } else {
             $user->password = bcrypt($request->input('password'));
             $user->save();
             return 200;

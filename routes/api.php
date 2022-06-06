@@ -32,7 +32,9 @@ Route::get('/reviews/{lugarInteresId}', [noticiaController::class,'showReviews']
 
 Route::get('/get_top_municipios/{num}', [noticiaController::class, 'get_top_municipios']);
 
-Route::put('/usuarios/actualizar/{id}', [noticiaController::class, 'updateUser']);
+Route::put('/usuarios/actualizar_email/{id}', [noticiaController::class, 'updateUserEmail']);
+
+Route::put('/usuarios/actualizar_password/{id}', [noticiaController::class, 'updateUserPass']);
 
 Route::get('/get_max_municipio_odio', [noticiaController::class, 'municipo_max_odio']);
 
