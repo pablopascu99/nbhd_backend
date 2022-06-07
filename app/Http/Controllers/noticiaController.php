@@ -250,8 +250,8 @@ class noticiaController extends Controller
     }
 
     public function get_nombre_localidad($id_localidad){
-        $nombre_loc = Localizaciones::select('municipio')->where('id', '=', $id_localidad)->first();
-        return $nombre_loc;
+        $nombre_loc = Localizaciones::select("municipio")->where("id", "=", $id_localidad)->first();
+        return $nombre_loc['municipio'];
     }
 
 }
