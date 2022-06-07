@@ -246,12 +246,12 @@ class noticiaController extends Controller
             $dato = array($top_municipios[$i]['municipio'] => $num_inmuebles);
             array_push($respuesta, $dato);
         }
-        return $respuesta;
+        return json_encode($respuesta);
     }
 
     public function get_nombre_localidad($id_localidad){
         $nombre_loc = Localizaciones::select("municipio")->where("id", "=", $id_localidad)->first();
-        return $nombre_loc['municipio'];
+        return json_encode($nombre_loc['municipio']);
     }
 
 }
