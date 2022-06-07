@@ -16,7 +16,7 @@ class noticiaController extends Controller
     {   
         $l = Localizaciones::where('municipio', '=', $localidad)->first();
         if ($l === null) {
-            $c = '"..\resources\py\clasificador.py" '.$localidad;
+            $c = '"..\resources\py\clasificador.py" '.'"'.$localidad.'"';
             $result = exec('python '.$c);
             $json_clean = str_replace("'","\"",$result);
             $json = json_decode($json_clean);
@@ -31,7 +31,7 @@ class noticiaController extends Controller
             $l->delete();
             $l1 = Localizaciones::where('municipio', '=', $localidad)->first();
             if ($l1 === null) {
-                $c = '"..\resources\py\clasificador.py" '.$localidad;
+                $c = '"..\resources\py\clasificador.py" '.'"'.$localidad.'"';
                 $result = exec('python '.$c);
                 $json_clean = str_replace("'","\"",$result);
                 $json = json_decode($json_clean);
@@ -81,7 +81,7 @@ class noticiaController extends Controller
             }
         } elseif ($in !== null and strtotime($in->updated_at) < strtotime('-30 days') ) {
             Inmuebles::where('localizaciones_id', '=', $id_localidad)->where('tipo', '=', $tipo)->delete();
-            $c = '"..\resources\py\scraper_yaencontre.py" '.$localidad." ".$tipo;
+            $c = '"..\resources\py\scraper_yaencontre.py" '.'"'.$localidad.'"'." ".$tipo;
             $result = exec('python '.$c);
             $json_clean = str_replace("'","\"",$result);
             $json = json_decode($json_clean);
