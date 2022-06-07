@@ -57,7 +57,7 @@ class noticiaController extends Controller
 
         $in = Inmuebles::where('localizaciones_id', '=', $id_localidad)->where('tipo', '=', $tipo)->first();
         if ($in === null) {
-            $c = '"..\resources\py\scraper_yaencontre.py" '.$localidad." ".$tipo;
+            $c = '"..\resources\py\scraper_yaencontre.py" '.'"'.$localidad.'"'." ".$tipo;
             $result = exec('python '.$c);
             $json_clean = str_replace("'","\"",$result);
             $json = json_decode($json_clean);
@@ -203,7 +203,7 @@ class noticiaController extends Controller
 
     public function get_top_municipios($num){
         $municipios = Localizaciones::orderBy('vecesConsultado', 'desc')->take($num)->get();
-        return json_encode($municipios);
+        return $municipios;
     }
 
     public function updateUserEmail(Request $request, $id) {
@@ -246,7 +246,7 @@ class noticiaController extends Controller
             $dato = array($top_municipios[$i]['municipio'] => $num_inmuebles);
             array_push($respuesta, $dato);
         }
-        return json_encode($respuesta);
+        return $respuesta;
     }
 
     public function get_nombre_localidad($id_localidad){
