@@ -130,6 +130,7 @@ class noticiaController extends Controller
                 $i->longitud = $item->longitud;
                 $i->latitudRadius = $latitud;
                 $i->longitudRadius = $longitud;
+                $i->tipo_establecimiento = $item->tipo_establecimiento;
                 $i->telefono = $item->telefono;
                 $i->puntuacion_media = $item->puntuacion_media;
                 $i->media_analisis = $item->media_analisis;
@@ -158,6 +159,7 @@ class noticiaController extends Controller
                 $i->longitud = $item->longitud;
                 $i->latitudRadius = $latitud;
                 $i->longitudRadius = $longitud;
+                $i->tipo_establecimiento = $item->tipo_establecimiento;
                 $i->telefono = $item->telefono;
                 $i->puntuacion_media = $item->puntuacion_media;
                 $i->media_analisis = $item->media_analisis;
