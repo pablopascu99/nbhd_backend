@@ -10,7 +10,7 @@ use App\Models\Comentarios;
 use App\Models\User;
 use App\Models\Reviews;
 
-class noticiaController extends Controller
+class apiController extends Controller
 {
     public function showOdio($localidad)
     {   

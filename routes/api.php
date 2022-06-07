@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 
@@ -18,29 +18,29 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/localidad/{localidad}', [noticiaController::class,'showOdio']);
+Route::get('/localidad/{localidad}', [apiController::class,'showOdio']);
 
-Route::get('/inmuebles/{localidad}/{tipo}', [noticiaController::class,'showInmuebles']);
+Route::get('/inmuebles/{localidad}/{tipo}', [apiController::class,'showInmuebles']);
 
-Route::get('/inmuebles/{inmuebleId}', [noticiaController::class,'getInmueble']);
+Route::get('/inmuebles/{inmuebleId}', [apiController::class,'getInmueble']);
 
-Route::get('/lugar_interes/{latitud}/{longitud}', [noticiaController::class,'showLugarInteres']);
+Route::get('/lugar_interes/{latitud}/{longitud}', [apiController::class,'showLugarInteres']);
 
-Route::get('/lugar_interes/{lugarInteresId}', [noticiaController::class,'getLugarInteres']);
+Route::get('/lugar_interes/{lugarInteresId}', [apiController::class,'getLugarInteres']);
 
-Route::get('/reviews/{lugarInteresId}', [noticiaController::class,'showReviews']);
+Route::get('/reviews/{lugarInteresId}', [apiController::class,'showReviews']);
 
-Route::get('/get_top_municipios/{num}', [noticiaController::class, 'get_top_municipios']);
+Route::get('/get_top_municipios/{num}', [apiController::class, 'get_top_municipios']);
 
-Route::put('/usuarios/actualizar_email/{id}', [noticiaController::class, 'updateUserEmail']);
+Route::put('/usuarios/actualizar_email/{id}', [apiController::class, 'updateUserEmail']);
 
-Route::put('/usuarios/actualizar_password/{id}', [noticiaController::class, 'updateUserPass']);
+Route::put('/usuarios/actualizar_password/{id}', [apiController::class, 'updateUserPass']);
 
-Route::get('/get_max_municipio_odio', [noticiaController::class, 'municipo_max_odio']);
+Route::get('/get_max_municipio_odio', [apiController::class, 'municipo_max_odio']);
 
-Route::get('/get_num_inmuebles/{num}', [noticiaController::class, 'get_num_inmuebles']);
+Route::get('/get_num_inmuebles/{num}', [apiController::class, 'get_num_inmuebles']);
 
-Route::get('/get_nombre_localidad/{id_localidad}', [noticiaController::class, 'get_nombre_localidad']);
+Route::get('/get_nombre_localidad/{id_localidad}', [apiController::class, 'get_nombre_localidad']);
 
 
 Route::group([
