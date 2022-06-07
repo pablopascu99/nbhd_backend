@@ -243,7 +243,7 @@ class noticiaController extends Controller
         }
         for($i = 0; $i < count($municipos_id); $i++){
             $num_inmuebles = Inmuebles::where("localizaciones_id", "=", $municipos_id[$i]['id'])->count();
-            $dato = array($top_municipios[$i]['municipio'] => $num_inmuebles);
+            $dato = array("localidad" => $top_municipios[$i]['municipio'],"inmuebles" => $num_inmuebles);
             array_push($respuesta, $dato);
         }
         return $respuesta;
