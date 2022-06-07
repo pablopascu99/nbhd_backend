@@ -40,6 +40,8 @@ Route::get('/get_max_municipio_odio', [noticiaController::class, 'municipo_max_o
 
 Route::get('/get_num_inmuebles/{num}', [noticiaController::class, 'get_num_inmuebles']);
 
+Route::get('/get_nombre_localidad/{id_localidad}', [noticiaController::class, 'get_nombre_localidad']);
+
 
 Route::group([
     'middleware' => 'api',
